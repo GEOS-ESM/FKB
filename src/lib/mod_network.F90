@@ -6,7 +6,9 @@ module mod_network
   use mod_dense_layer, only: Dense
   use mod_dropout_layer, only: Dropout
   use mod_batchnorm_layer, only: BatchNorm
+#ifdef CAF
   use mod_parallel, only: tile_indices
+#endif
 
   implicit none
 
@@ -341,13 +343,14 @@ contains
     class(network_type), intent(in out) :: self
     integer(ik), intent(in) :: image
     integer(ik) :: n
+#ifdef CAF
     if (num_images() == 1) return
     layers: do n = 1, size(self % layers) ! changed from dims
-#ifdef CAF
       call co_broadcast(self % layers(n) % p % b, image)
       call co_broadcast(self % layers(n) % p % w, image)
-#endif
     end do layers
+#endif
+    return
   end subroutine sync
 
 end module mod_network

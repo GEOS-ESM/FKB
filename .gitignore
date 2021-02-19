@@ -5,3 +5,4 @@ data/mnist/*.dat
 *.h5
 *.pyc
 .DS_Store
+ExampleModels/simple_model_saved.txt
